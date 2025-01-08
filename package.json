@@ -7,7 +7,7 @@
   "keywords": ["webrtc", "srs", "streaming", "rtc"],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/您的用户名/srs-rtc-sdk.git"
+    "url": "git+https://github.com/modernve/srs-rtc-sdk.git"
   },
   "publishConfig": {
     "access": "public"
