@@ -2,7 +2,7 @@
   "name": "srs-rtc-sdk",
   "version": "1.0.0",
   "description": "SRS WebRTC SDK",
-  "author": "您的名字",
+  "author": "modernve",
   "license": "MIT",
   "keywords": ["webrtc", "srs", "streaming", "rtc"],
   "repository": {
