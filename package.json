@@ -1,0 +1,34 @@
+{
+  "name": "srs-rtc-sdk",
+  "version": "1.0.0",
+  "description": "SRS WebRTC SDK",
+  "author": "您的名字",
+  "license": "MIT",
+  "keywords": ["webrtc", "srs", "streaming", "rtc"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/您的用户名/srs-rtc-sdk.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "dist/main.js",
+  "module": "dist/main.mjs",
+  "types": "dist/main.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "type-check": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "vite": "^5.0.0",
+    "vite-plugin-dts": "^3.0.0"
+  },
+  "dependencies": {
+    "@types/node": "^22.10.5"
+  }
+}
