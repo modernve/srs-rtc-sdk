@@ -5,9 +5,9 @@ import { resolve } from 'path'
 export default defineConfig({
   build: {
     lib: {
-      entry: resolve(__dirname, 'lib/main.ts'),
+      entry: resolve(__dirname, 'lib/index.ts'),
       name: 'SrsRtcSdk',
-      fileName: 'main',
+      fileName: 'index',
       formats: ['es', 'umd']
     },
     sourcemap: true,

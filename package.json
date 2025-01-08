@@ -10,11 +10,12 @@
     "url": "git+https://github.com/modernve/srs-rtc-sdk.git"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
-  "main": "dist/main.js",
-  "module": "dist/main.mjs",
-  "types": "dist/main.d.ts",
+  "main": "dist/index.umd.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
