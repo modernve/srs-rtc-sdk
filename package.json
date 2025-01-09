@@ -1,10 +1,15 @@
 {
   "name": "srs-rtc-sdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "SRS WebRTC SDK",
   "author": "modernve",
   "license": "MIT",
-  "keywords": ["webrtc", "srs", "streaming", "rtc"],
+  "keywords": [
+    "webrtc",
+    "srs",
+    "streaming",
+    "rtc"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/modernve/srs-rtc-sdk.git"
