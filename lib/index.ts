@@ -16,6 +16,8 @@ class SrsRTCPublisher {
     params: {},
     https: false,
   };
+  
+  private pc: RTCPeerConnection | null = null;
 
   constructor(option?: Partial<SrsRTCOption>) {
     if (option) {
@@ -27,7 +29,12 @@ class SrsRTCPublisher {
   }
 
   async publish(stream: MediaStream) {
-    const pc = new RTCPeerConnection();
+    if (this.pc) {
+      this.pc.close();
+    }
+
+    this.pc = new RTCPeerConnection();
+    const pc = this.pc;
 
     pc.addTransceiver("video", { direction: "sendonly" });
     pc.addTransceiver("audio", { direction: "sendonly" });
@@ -35,33 +42,51 @@ class SrsRTCPublisher {
     pc.addTrack(stream.getVideoTracks()[0]);
     pc.addTrack(stream.getAudioTracks()[0]);
 
+    try {
+      const offer = await pc.createOffer();
+      await pc.setLocalDescription(offer);
 
-    const offer = await pc.createOffer();
-    await pc.setLocalDescription(offer);
+      const queryString = new URLSearchParams(this.option.params).toString();
+      const streamurl = `webrtc://${this.option.ip}/${this.option.app}/${this.option.stream}${queryString ? '?' + queryString : ''}`;
 
-    const queryString = new URLSearchParams(this.option.params).toString();
-    const streamurl = `webrtc://${this.option.ip}/${this.option.app}/${this.option.stream}${queryString ? '?' + queryString : ''}`;
+      const response = await fetch(
+        `http${this.option.https ? 's' : ''}://${this.option.ip}:${this.option.port}/rtc/v1/publish/`,
+        {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            streamurl: streamurl,
+            sdp: offer.sdp,
+            api: `http${this.option.https ? 's' : ''}://${this.option.ip}:${this.option.port}/rtc/v1/publish/`,
+          }),
+        }
+      );
 
-    const response = await fetch(
-      `http${this.option.https ? 's' : ''}://${this.option.ip}:${this.option.port}/rtc/v1/publish/`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          streamurl: streamurl,
-          sdp: offer.sdp,
-          api: `http${this.option.https ? 's' : ''}://${this.option.ip}:${this.option.port}/rtc/v1/publish/`,
-        }),
+      const data = await response.json();
+      if (data.code !== 0) {
+        throw new Error("获取 Answer 失败");
       }
-    );
 
-    const data = await response.json();
-    if (data.code !== 0) {
-      throw new Error("获取 Answer 失败");
+      await pc.setRemoteDescription(
+        new RTCSessionDescription({ type: "answer", sdp: data.sdp })
+      );
+    } catch (error) {
+      console.error('发布失败:', error);
+      if (this.pc) {
+        this.pc.close();
+        this.pc = null;
+      }
+      throw error;
     }
+  }
 
-    await pc.setRemoteDescription(
-      new RTCSessionDescription({ type: "answer", sdp: data.sdp })
-    );
+  dispose() {
+    if (this.pc) {
+      this.pc.close();
+      this.pc = null;
+    }
   }
 }
 
